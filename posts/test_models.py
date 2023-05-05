@@ -9,9 +9,11 @@ class PostTests(TestCase):
     post = Post(
       title="The King in Yellow",
       content="https://www.gutenberg.org/files/8492/8492-h/8492-h.htm",
-      pub_date=timezone.now()
+      pub_date=timezone.now(),
+      type=Post.PostTypes.LINK
     )
 
     self.assertIs(post.title, "The King in Yellow")
     self.assertIs(post.content, "https://www.gutenberg.org/files/8492/8492-h/8492-h.htm")
     self.assertIs(post.pub_date.day, timezone.now().day)
+    self.assertIs(post.type, Post.PostTypes.LINK)
