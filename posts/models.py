@@ -4,7 +4,7 @@ from django.utils import timezone
 
 class Tag(models.Model):
     name = models.CharField(max_length=200)
-    creation_date = models.DateTimeField()
+    creation_date = models.DateTimeField(default=timezone.now)
 
 
 class Post(models.Model):
@@ -15,7 +15,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=200)
     content = models.CharField(max_length=2048)
-    creation_date = models.DateTimeField()
+    creation_date = models.DateTimeField(default=timezone.now)
     type = models.CharField(max_length=16, choices=PostTypes.choices)
 
 

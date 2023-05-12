@@ -28,6 +28,16 @@ class PostTests(TestCase):
         self.assertIs(self.post.creation_date.day, timezone.now().day)
         self.assertIs(self.post.type, Post.PostTypes.LINK)
 
+    def test_creation_date_defaults_to_now(self):
+        post = Post(
+            title="The King in Yellow",
+            content="https://www.gutenberg.org/files/8492/8492-h/8492-h.htm",
+            type=Post.PostTypes.LINK,
+        )
+        self.assertIs(post.creation_date.day, timezone.now().day)
+        self.assertIs(post.creation_date.hour, timezone.now().hour)
+        self.assertIs(post.creation_date.minute, timezone.now().minute)
+
     def test_post_has_tags(self):
         self.post.tags.add(self.tag, through_defaults={"manual": False})
 
@@ -39,7 +49,6 @@ class TagTests(TestCase):
         self.post = Post(
             title="The King in Yellow",
             content="https://www.gutenberg.org/files/8492/8492-h/8492-h.htm",
-            creation_date=timezone.now(),
             type=Post.PostTypes.LINK,
         )
         self.post.save()
@@ -53,6 +62,14 @@ class TagTests(TestCase):
     def test_can_be_created_with_properties(self):
         self.assertIs(self.tag.name, "Fiction")
         self.assertIs(self.tag.creation_date.day, timezone.now().day)
+
+    def test_creation_date_defaults_to_now(self):
+        tag = Tag(
+            name="Fiction",
+        )
+        self.assertIs(tag.creation_date.day, timezone.now().day)
+        self.assertIs(tag.creation_date.hour, timezone.now().hour)
+        self.assertIs(tag.creation_date.minute, timezone.now().minute)
 
     def test_tag_has_post(self):
         self.post.tags.add(self.tag, through_defaults={"manual": False})
@@ -70,18 +87,24 @@ class TaggingTests(TestCase):
         self.assertTrue(tagging.manual)
         self.assertIs(tagging.creation_date.day, timezone.now().day)
 
+    def test_creation_date_defaults_to_now(self):
+        tagging = Tagging(
+            manual=True,
+        )
+        self.assertIs(tagging.creation_date.day, timezone.now().day)
+        self.assertIs(tagging.creation_date.hour, timezone.now().hour)
+        self.assertIs(tagging.creation_date.minute, timezone.now().minute)
+
     def test_tag_has_post_via_tagging(self):
         post = Post(
             title="The King in Yellow",
             content="https://www.gutenberg.org/files/8492/8492-h/8492-h.htm",
-            creation_date=timezone.now(),
             type=Post.PostTypes.LINK,
         )
         post.save()
 
         tag = Tag(
             name="Fiction",
-            creation_date=timezone.now(),
         )
         tag.save()
 
