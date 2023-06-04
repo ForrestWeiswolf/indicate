@@ -1,8 +1,7 @@
 import pdb
 from django.test import TestCase
-from django.urls import reverse
 
-from .models import Post
+from .models import Post, Tag
 
 
 class PostListViewTest(TestCase):
@@ -34,3 +33,14 @@ class PostListViewTest(TestCase):
             response.data[1]["content"],
             "https://www.gutenberg.org/cache/epub/14540/pg14540-images.html",
         )
+
+
+class TagListViewTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        tags = [Tag.objects.create(name="Fiction")]
+
+    def test_view_tags(self):
+        response = self.client.get("/posts/tags/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data[0]["name"], "Fiction")
