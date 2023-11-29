@@ -56,3 +56,8 @@ class TagListViewTest(TestCase):
         response = self.client.get("/posts/tags/")
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data[0]["name"], "Fiction")
+
+    def test_view_single_tag(self):
+        response = self.client.get("/posts/tags/1/")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["name"], "Fiction")
