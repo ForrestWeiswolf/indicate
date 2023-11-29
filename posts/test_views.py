@@ -14,25 +14,37 @@ class PostListViewTest(TestCase):
                 type=Post.PostTypes.LINK,
             ),
             Post.objects.create(
-                title="The King in Yellow",
-                content="https://www.gutenberg.org/files/8492/8492-h/8492-h.htm",
+                title="Django Rest Framework",
+                content="https://www.django-rest-framework.org/",
                 type=Post.PostTypes.LINK,
             ),
         ]
+        posts[0].tags.add(Tag.objects.create(name="Fiction"), through_defaults={"manual": True})
+        posts[1].tags.add(Tag.objects.create(name="Software"), through_defaults={"manual": True})
+        posts[1].tags.add(Tag.objects.create(name="Django"), through_defaults={"manual": True})
 
     def test_view_posts(self):
         response = self.client.get("/posts/posts/")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data[0]["title"], "The King in Yellow")
+        self.assertEqual(response.data[0]["title"], "Django Rest Framework")
         self.assertEqual(
             response.data[0]["content"],
-            "https://www.gutenberg.org/files/8492/8492-h/8492-h.htm",
+            "https://www.django-rest-framework.org/",
+        )
+        self.assertEqual(
+            response.data[0]["tags"],
+            ["http://testserver/posts/tags/2/", "http://testserver/posts/tags/3/"]
         )
         self.assertEqual(response.data[1]["title"], "When William Came")
         self.assertEqual(
             response.data[1]["content"],
             "https://www.gutenberg.org/cache/epub/14540/pg14540-images.html",
         )
+        self.assertEqual(
+            response.data[1]["tags"],
+            ["http://testserver/posts/tags/1/"]
+        )
+
 
 
 class TagListViewTest(TestCase):
